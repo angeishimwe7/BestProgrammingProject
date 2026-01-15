@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Smart Bank - Login</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="style.css">
     <style>
         .login-container {
             max-width: 420px;
@@ -123,6 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <button type="submit" class="btn-login">Login</button>
     </form>
+
+    <p style="text-align: center; margin-top: 1rem;">
+        Don't have an account? <a href="signup.php" style="color: #667eea; font-weight: 600;">Sign Up</a>
+    </p>
 </div>
 
 </body>

@@ -1,4 +1,55 @@
-<style>
+<?php
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Sample data (in real application, fetch from database)
+$accounts = [
+    [
+        'type' => 'Savings Account',
+        'number' => '****1234',
+        'balance' => 15750.50,
+        'icon' => '💰'
+    ],
+    [
+        'type' => 'Checking Account',
+        'number' => '****5678',
+        'balance' => 8420.75,
+        'icon' => '💳'
+    ],
+    [
+        'type' => 'Credit Card',
+        'number' => '****9012',
+        'balance' => 2150.00,
+        'icon' => '💎'
+    ]
+];
+
+$recent_transactions = [
+    ['date' => '2024-12-18', 'description' => 'Grocery Store', 'amount' => -125.50, 'type' => 'debit'],
+    ['date' => '2024-12-17', 'description' => 'Salary Deposit', 'amount' => 3500.00, 'type' => 'credit'],
+    ['date' => '2024-12-16', 'description' => 'Electric Bill', 'amount' => -85.00, 'type' => 'debit'],
+    ['date' => '2024-12-15', 'description' => 'Online Transfer', 'amount' => -500.00, 'type' => 'debit'],
+    ['date' => '2024-12-14', 'description' => 'Refund', 'amount' => 45.00, 'type' => 'credit']
+];
+
+$total_balance = array_sum(array_column($accounts, 'balance'));
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Bank - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -727,60 +778,7 @@ a {
         font-size: 0.9rem;
     }
 }
-</style>
-
-<?php
-session_start();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    $_SESSION['user_id'] = 1;
-    $_SESSION['full_name'] = 'Test User';
-}
-
-// Sample data (in real application, fetch from database)
-$accounts = [
-    [
-        'type' => 'Savings Account',
-        'number' => '****1234',
-        'balance' => 15750.50,
-        'icon' => '💰'
-    ],
-    [
-        'type' => 'Checking Account',
-        'number' => '****5678',
-        'balance' => 8420.75,
-        'icon' => '💳'
-    ],
-    [
-        'type' => 'Credit Card',
-        'number' => '****9012',
-        'balance' => 2150.00,
-        'icon' => '💎'
-    ]
-];
-
-$recent_transactions = [
-    ['date' => '2024-12-18', 'description' => 'Grocery Store', 'amount' => -125.50, 'type' => 'debit'],
-    ['date' => '2024-12-17', 'description' => 'Salary Deposit', 'amount' => 3500.00, 'type' => 'credit'],
-    ['date' => '2024-12-16', 'description' => 'Electric Bill', 'amount' => -85.00, 'type' => 'debit'],
-    ['date' => '2024-12-15', 'description' => 'Online Transfer', 'amount' => -500.00, 'type' => 'debit'],
-    ['date' => '2024-12-14', 'description' => 'Refund', 'amount' => 45.00, 'type' => 'credit']
-];
-
-$total_balance = array_sum(array_column($accounts, 'balance'));
-$current_page = basename($_SERVER['PHP_SELF']);
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Bank - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    </style>
 </head>
 <body>
     <header class="main-header">

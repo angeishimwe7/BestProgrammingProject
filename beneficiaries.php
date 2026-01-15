@@ -11,30 +11,27 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Database connection (adjust credentials)
-$mysqli = new mysqli("localhost", "root", "", "smart_bank");
-if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
-}
+// Database connection
+include 'connection.php';
 
 // Add new beneficiary
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_beneficiary'])) {
-    $name = $mysqli->real_escape_string($_POST['beneficiary_name']);
-    $account = $mysqli->real_escape_string($_POST['account_number']);
-    $bank = $mysqli->real_escape_string($_POST['bank_name']);
-    $relationship = $mysqli->real_escape_string($_POST['relationship']);
+    $name = $conn->real_escape_string($_POST['beneficiary_name']);
+    $account = $conn->real_escape_string($_POST['account_number']);
+    $bank = $conn->real_escape_string($_POST['bank_name']);
+    $relationship = $conn->real_escape_string($_POST['relationship']);
 
     $insert_sql = "INSERT INTO beneficiaries (user_id, beneficiary_name, account_number, bank_name, relationship) 
                    VALUES ('$user_id', '$name', '$account', '$bank', '$relationship')";
-    if ($mysqli->query($insert_sql)) {
+    if ($conn->query($insert_sql)) {
         $success_msg = "Beneficiary added successfully!";
     } else {
-        $error_msg = "Error: " . $mysqli->error;
+        $error_msg = "Error: " . $conn->error;
     }
 }
 
 // Fetch beneficiaries for the logged-in user
-$result = $mysqli->query("SELECT * FROM beneficiaries ORDER BY created_at DESC");
+$result = $conn->query("SELECT * FROM beneficiaries ORDER BY created_at DESC");
 $beneficiaries = $result->fetch_all(MYSQLI_ASSOC);
 
 // Get current page
